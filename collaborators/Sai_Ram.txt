@@ -1,0 +1,15 @@
+Problems
+ fY|X=x(y) = P(y ≤ Y ≤ y+∆y|x ≤ X ≤x+∆x)
+ 1. There are 4 blue balls and 6 red balls in a box. Balls are blindly removed one by one. Find the
+ probability of the 3rd ball drawn being red. The answer may feel obvious but we cannot forget
+ that this probability depends on the previous two draws. Hence try to arrive at the answer using
+ only conditional arguments.
+ 2. Monty Hall Problem: Suppose you’re on a game show, and you’re given the choice of three
+ doors: Behind one door is a cash prize of 10000 Rs; behind the others, nothing. You pick a door,
+ Should you or should you not switch?
+ say No. 1, and the host (who knows what’s behind the doors) opens one of the other doors, say
+ No. 3, which has nothing behind it. He then says to you, ”Do you want to pick door No. 2?”
+ 3. Suppose that X and Y have a joint continuous distribution with joint PDF fXY(x,y) =
+ e−xwhen0 ≤ y < x <∞ and 0 elsewhere
+ • Find the conditional CDF FY/X=k where k is a constant and 0 < k < ∞.
+ • Use this to find the conditional PDF
