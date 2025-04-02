@@ -9,7 +9,12 @@ Outputs : Encoded message (just the one-one mapping of the message)
         Decoded message list (The message list after decoding)
         Decoded message (finally, decoded message)
         Mutual information for this encoding
-Comments : Sorry, due to less time i haven't documented this code properly.
+        Estimated channel capacity
+        Ideal probability list
+        Ranked list used here
+        Estimated ideal ranked list
+        Mutual information of a slightly better encoding
+Comments : I haven't documented this code properly.
 """
 
 import numpy as np
@@ -223,13 +228,13 @@ def max_index_of_list_finder(prob_iterable):
             max_element_index = i
     return max_element_index
 
-
 encodings_list1 = []
 char_desc_order1 = []
-temp_prob_of_possible_inputs1 = prob_of_possible_inputs1.copy()
+temp_prob_of_possible_inputs1 = np.copy(prob_of_possible_inputs1)
+temp_prob_errors1 = prob_errors_list1.copy()
 ordered_prob_arr1 = np.zeros((no_of_inputs,), dtype="float64")
 
-while prob_of_possible_inputs1!=[]:
+while prob_of_possible_inputs1 !=[]:
      i = min_index_of_list_finder(prob_errors_list1)
      j = max_index_of_list_finder(prob_of_possible_inputs1)
      ordered_prob_arr1[i] = prob_of_possible_inputs1[j]
@@ -239,12 +244,19 @@ while prob_of_possible_inputs1!=[]:
      prob_of_possible_inputs1.pop(j)
      possible_inputs1.pop(j)
 
-
-prob_of_possible_inputs1 = temp_prob_of_possible_inputs1
+prob_of_possible_inputs1 = np.copy(temp_prob_of_possible_inputs1)
+prob_errors_list1 = temp_prob_errors1.copy()
 #print(char_desc_order1)
 #print(encodings_list1)
 
 message1 = str(input("Enter the message : "))
+"""
+message1 = ""
+no_of_trials = 80000
+char_to_check = "u"
+for i in range(no_of_trials):
+    message1 += char_to_check
+"""
 
 encoded_message1 = []
 for i in message1:
@@ -268,6 +280,16 @@ def channel_simulator(channel_matrix, encoded_message_list):
 
 sent_message1 = channel_simulator(channel_matrix1, encoded_message1)
 print("Sent message :", sent_message1)
+
+def total_prob_matrix_gen(channel_matrix, ordered_prob_of_inputs):
+    prob_matrix = np.zeros(channel_matrix.shape, "float64")
+    m, n = channel_matrix.shape
+    for j in range(m):
+        prob_matrix[j] = channel_matrix[j] * ordered_prob_of_inputs[j]
+    return prob_matrix
+
+prob_matrix1 = total_prob_matrix_gen(channel_matrix1, ordered_prob_arr1)
+reverse_channel_matrix1 = reverse_channel_matrix_gen(prob_matrix1)
 
 def message_decoder(reverse_channel_matrix, sent_message, encodings_list, char_desc_order):
     decoded_message_list = []
@@ -308,3 +330,54 @@ def mutual_information_for_this_encoding(channel_matrix, ordered_prob_of_inputs)
     return entropy_of_y - entropy_of_y_given_x
 
 print("Mutual information for this encoding: ", mutual_information_for_this_encoding(channel_matrix1, ordered_prob_arr1))
+
+def channel_capacity_estimator(channel_matrix, initial_ordered_prob_of_inputs_arr, small_increment, no_of_runs):
+    ordered_prob_of_inputs = np.copy(initial_ordered_prob_of_inputs_arr)
+    #ordered_prob_of_inputs = np.zeros((29,))
+    #ordered_prob_of_inputs[0] = 1
+    max_mutual_information = mutual_information_for_this_encoding(channel_matrix, ordered_prob_of_inputs)
+    for j in range(no_of_runs):
+        initial_ordered_prob_of_inputs_arr = np.copy(ordered_prob_of_inputs)
+        for i in range(len(initial_ordered_prob_of_inputs_arr)):
+            temp_ordered_prob_of_inputs = np.copy(ordered_prob_of_inputs)
+            new_num = temp_ordered_prob_of_inputs[i]+small_increment
+            if new_num >= 0.0:
+                temp_ordered_prob_of_inputs[i] = new_num
+            temp_ordered_prob_of_inputs /= np.sum(temp_ordered_prob_of_inputs)
+            new_mutual_info = mutual_information_for_this_encoding(channel_matrix, temp_ordered_prob_of_inputs)
+            if new_mutual_info > max_mutual_information:
+                ordered_prob_of_inputs = np.copy(temp_ordered_prob_of_inputs)
+                max_mutual_information = new_mutual_info
+        if (initial_ordered_prob_of_inputs_arr == ordered_prob_of_inputs).all():
+            small_increment /= -2
+    return max_mutual_information, ordered_prob_of_inputs
+
+"""
+count = 0
+for i in decoded_message_str1:
+    if i != char_to_check:
+        count+=1
+print(count/no_of_trials)
+print(prob_errors_list1[encodings_list1[char_desc_order1.index(char_to_check)]-1])
+"""
+
+channel_capacity1, ideal_prob_arr1 = channel_capacity_estimator(channel_matrix1, ordered_prob_arr1, 0.5, 50)
+temp_ideal_prob_arr1 = np.copy(ideal_prob_arr1)
+ideal_ranked_list1 = []
+for _ in ideal_prob_arr1:
+    max_index = max_index_of_list_finder(temp_ideal_prob_arr1)
+    ideal_ranked_list1.append(max_index+1)
+    temp_ideal_prob_arr1[max_index] = -1
+new_prob_arr1 = np.zeros((no_of_inputs,))
+temp_prob_of_possible_inputs1 = np.copy(prob_of_possible_inputs1)
+
+for i in ideal_ranked_list1:
+    max_index = max_index_of_list_finder(temp_prob_of_possible_inputs1)
+    new_prob_arr1[i-1] = temp_prob_of_possible_inputs1[max_index]
+    temp_prob_of_possible_inputs1[max_index] = -1
+
+print("Channel_capacity :", channel_capacity1)
+print("Estimated Ideal probability list :", list(enumerate(np.insert(ideal_prob_arr1, 0,-1).tolist()))[1:])
+print("Ranked list used here :", encodings_list1)
+print("Estimated ideal ranked list :", list(ideal_ranked_list1))
+print("Mutual information of a slightly better encoding :", mutual_information_for_this_encoding(channel_matrix1, new_prob_arr1))
