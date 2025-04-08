@@ -17,9 +17,12 @@ Outputs : Approximate mean
         Received message
         Original message
         Decoded message
+        Rate of information sent using hamming codes
+        Channel capacity
         Theoretical Probability of no error using hamming code
-        Probability of no error without any encoding
         Experimental Probability of no error using hamming code
+        Theoretical Probability of no error without any encoding
+
 """
 
 import random
@@ -40,7 +43,6 @@ avg_power1 = 25
 no_of_iterations1 = 10000
 file_name1 = "binary_file.txt"
 no_of_redundant_bits_per_block1 = 3
-
 
 def gaussian_channel(mean_error, std_dev_of_error, input_value):
     u1 = random.random()    #using box-muller transform
@@ -180,6 +182,9 @@ def experimental_probability_of_no_error_using_hamming_code(message_list, no_of_
             count+=1
     return count/no_of_iterations
 
+def channel_capacity_calculator(avg_power, variance_of_error):
+    return 0.5 * math.log2(1 + avg_power/variance_of_error)
+
 approx_mean_error1, approx_variance_of_error1, approx_std_dev_of_error1 = gaussian_channel_metrics_estimator(no_of_iterations1, mean_error1, std_dev_of_error1)
 print("Approximate mean :",  approx_mean_error1)
 print("Approximate variance:", approx_variance_of_error1)
@@ -193,7 +198,8 @@ print("Received message list :", received_message_list1)
 decoded_message_list1 = hamming_message_decoder(received_message_list1, no_of_redundant_bits_per_block1)
 print("Original message      :", message_list1)
 print("Decoded message list  :", decoded_message_list1)
-print("Rate of information sent using hamming codes :", len(message_list1)/len(encoded_message_list1))
+print("Rate of information sent using hamming codes :", len(message_list1)/len(encoded_message_list1), "bits per channel use")
+print("Channel capacity :", channel_capacity_calculator(avg_power1, std_dev_of_error1*std_dev_of_error1), "bits per channel use")
 print("Theoretical Probability of no error using hamming code :", probability_of_no_error_using_hamming_code(avg_power1, approx_variance_of_error1, no_of_redundant_bits_per_block1, len(received_message_list1)))
 print("Experimental Probability of no error using hamming code :", experimental_probability_of_no_error_using_hamming_code(message_list1, no_of_redundant_bits_per_block1, no_of_iterations1, avg_power1, mean_error1, std_dev_of_error1, approx_mean_error1, approx_std_dev_of_error1))
 print("Theoretical Probability of no error without any encoding :", probability_of_no_error_without_any_encoding(avg_power1, approx_variance_of_error1, len(message_list1)))
