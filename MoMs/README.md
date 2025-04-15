@@ -9,6 +9,7 @@ This directory contains the Minutes of Meetings (MoMs) for various study group s
 | Date | Meeting | File |
 |------|---------|------|
 | April 15, 2025 | Turbo Code Study Group Meeting | [15.04.2025_MoM_Turbo_Code_SG.pdf](15.04.2025_MoM_Turbo_Code_SG.pdf) |
+| April 13, 2025 | Turbo Code Study Group Meeting | [13.04.2025_MoM_Turbo_Code_SG.pdf](13.04.2025_MoM_Turbo_Code_SG.pdf) |
 | April 12, 2025 | Turbo Code Study Group Meeting | [12.04.2025_MoM_Turbo_code_sg.pdf](12.04.2025_MoM_Turbo_code_sg.pdf) |
 | April 11, 2025 | Turbo Code Study Group Meeting | [11.04.2025_MoM_Turbocode_sg.pdf](11.04.2025_MoM_Turbocode_sg.pdf) |
 
