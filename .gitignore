@@ -1,0 +1,7 @@
+# Ignore all .log files
+*.log
+# JetBrains IDE project files
+.idea/
+*.iml
+#vs code files
+.vscode/
