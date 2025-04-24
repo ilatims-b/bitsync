@@ -1,0 +1,111 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb, geometry, listings, color, hyperref}
+\geometry{margin=1in}
+\definecolor{codegray}{gray}{0.9}
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  language=Python,
+  showstringspaces=false,
+  tabsize=4
+}
+
+\title{Turbo Codes Documentation}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+Turbo codes are a vital development in error correction techniques, enabling reliable communication over noisy channels. Introduced in 1993 by Claude Berrou, Alain Glavieux, and Punya Thitimajshima, turbo codes revolutionized digital communications by approaching Shannon's theoretical limit of channel capacity. They are based on parallel concatenation of two Recursive Systematic Convolutional (RSC) codes, separated by an interleaver.
+
+Key features of turbo codes include:
+\begin{itemize}
+    \item \textbf{Iterative Decoding:} Using the soft-in/soft-out BCJR algorithm for decoding.
+    \item \textbf{High Error Correction Capability:} Efficiently reduces bit error rate (BER).
+    \item \textbf{Flexibility:} Adaptable to a range of systems such as 3G, LTE, and satellite links.
+\end{itemize}
+
+\section*{Turbo Coding Process}
+\subsection*{Encoding}
+Turbo coding starts with data encoding using two RSC encoders. The original data and its interleaved version are each fed into one encoder. Each encoder produces parity bits. Together with the original bits, they form the transmitted signal.
+
+\subsection*{Interleaving}
+The interleaver scrambles the order of the input bits before the second encoding step, distributing errors to enhance error correction during decoding.
+
+\subsection*{Puncturing (Not Implemented)}
+This optional step omits some parity bits to adjust the code rate. It helps in achieving higher data throughput at the cost of slightly reduced error performance.
+
+\section*{Implementation Details}
+This implementation uses Python, TensorFlow, and the Sionna library. TensorFlow enables tensor operations and Sionna provides optimized communication primitives including the BCJR decoder.
+
+\section*{Function Descriptions}
+
+\subsection*{\texttt{gaussian\_channel\_simulator}}
+\textbf{Purpose:} Adds Gaussian noise to the modulated signal.\newline
+\textbf{Inputs:} Encoded data list, standard deviation of the Gaussian noise.\newline
+\textbf{Output:} Noisy encoded signal, simulating a realistic channel.
+
+\subsection*{\texttt{zero\_padding}}
+\textbf{Purpose:} Ensures the message length is a multiple of the block size by appending zeros.
+
+\subsection*{\texttt{rs\_encoder}}
+\textbf{Purpose:} Applies (7,5) Recursive Systematic Convolutional encoding.\newline
+\textbf{Inputs:} Message list, number of information bits in a block, option to enforce final state (0,0).\newline
+\textbf{Output:} Encoded message with parity appended.
+
+\subsection*{\texttt{interleaver}}
+\textbf{Purpose:} Applies a permutation based on modular multiplication to scatter bits. But, for this interleaver to work properly, number of information bits in a block must be of the form of a prime - 2, the seed also has some constraints\newline
+\textbf{Inputs:} seed(a number), number of information bits in a block + 2, list/array to be permuted.\newline
+\textbf{Output:} Interleaved list/array.
+
+\subsection*{\texttt{turbo\_encoder\_without\_puncturing}}
+\textbf{Purpose:} Combines two RSC encoders and an interleaver to generate systematic and redundant bits.
+
+\subsection*{\texttt{mix\_sys\_parity}}
+\textbf{Purpose:} Alternates between systematic and parity data for combined output.
+
+\subsection*{\texttt{turbo\_decode}}
+\textbf{Purpose:} Iteratively decodes received sequences using the BCJR algorithm imported from sionna library. Here, the seed and its inverse should be such that seed*inverse must give remainder 1 when divided by number of information bits per block+2 \newline
+\textbf{Inputs:} Systematic, parity1, parity2 sequences; interleaver parameters(seed and its inverse, block length); number of iterations.\newline
+\textbf{Output:} Final log-likelihood ratios after iterations.
+
+\subsection*{\texttt{hard\_message\_output}}
+\textbf{Purpose:} Converts LLRs into binary hard decisions. Removes final two bits added for (0,0) state.
+
+\subsection*{\texttt{no\_of\_bit\_errors\_finder}}
+\textbf{Purpose:} Computes the number of bit mismatches between original and decoded sequences.
+
+\section*{Function Summary}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Function Name} & \textbf{Description} \\
+\hline
+\texttt{gaussian\_channel\_simulator} & Simulates Gaussian noise for a realistic transmission environment. \\
+\texttt{rs\_encoder} & Performs RSC encoding adding parity bits and optionally terminating to state (0,0). \\
+\texttt{interleaver} & Permutes the message sequence to enhance error dispersion. \\
+\texttt{turbo\_encoder\_without\_puncturing} & Implements full turbo encoding using two encoders and one interleaver. \\
+\texttt{turbo\_decode} & Decodes the encoded data using iterative soft decision decoding (BCJR). \\
+\texttt{hard\_message\_output} & Converts soft LLRs to binary values for final decisions. \\
+\texttt{no\_of\_bit\_errors\_finder} & Calculates total bit errors between source and decoded sequences. \\
+\hline
+\end{tabular}
+
+\section*{Sample Output}
+\begin{itemize}
+  \item Encoded message: [1, 0, 1, 0, ..., 0]
+  \item Noisy channel output: [1, 0, 1, ..., 0]
+  \item Padded original message: [1, 0, 1, 0, ..., 0]
+  \item Decoded message: [1, 0, 1, 0, ..., 0]
+  \item Bit errors: 6
+  \item Bit errors without coding: 173
+\end{itemize}
+
+\section*{Conclusion}
+This document presents a detailed guide to implementing turbo codes using Python. With robust components for encoding, interleaving, and decoding, this system provides excellent error correction suitable for modern communication needs.
+
+\end{document}
+
+
