@@ -1,0 +1,325 @@
+\documentclass[12pt]{amsart}
+\usepackage[margin=0.8in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{mathdots}
+\usepackage{mathrsfs}
+\usepackage[all]{xy}
+\usepackage[pdftex]{graphicx}
+\usepackage{color}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{indent first}
+\usepackage[labelfont=bf,labelsep=period,justification=raggedright]{caption}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{tkz-fct}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{pgfplots}
+\usepackage{multicol}
+\PassOptionsToPackage{dvipsnames,svgnames}{xcolor}
+\usepackage{textcomp}
+\usepackage{bbm}
+\usepackage{forest}
+\usepackage{array}
+\newcolumntype{C}{<{$}c>{$}}
+\usepackage{enumitem} 
+\usepackage{graphicx}
+\usepackage{booktabs}
+\topmargin 0.1cm
+ %\oddsidemargin 0.3cm
+ %\evensidemargin 0.3cm
+% \textwidth 14cm 
+% \textheight 20.2cm
+
+% \setlength{\oddsidemargin}{0.25in}
+% \setlength{\evensidemargin}{0.25in}
+% \setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.25in}
+%\setlength{\textheight}{8in}
+
+
+\newcommand{\QED}{\hspace{\stretch{1}} $\blacksquare$}
+\renewcommand{\AA}{\mathbb{A}}
+\newcommand{\BB}{\mathbb{B}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\FF}{\mathbb{F}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\OO}{\mathbb{O}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\GG}{\mathbb{G}}
+\newcommand{\DD}{\mathbb{D}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\bfm}{\mathbf{m}}
+\newcommand{\mcA}{\mathcal{A}}
+\newcommand{\mcB}{\mathcal{B}}
+\newcommand{\mcC}{\mathcal{C}}
+\newcommand{\mcE}{\mathcal{E}}
+\newcommand{\mcG}{\mathcal{G}}
+\newcommand{\mcH}{\mathcal{H}}
+\newcommand{\mcI}{\mathcal{I}}
+\newcommand{\mcM}{\mathcal{M}}
+\newcommand{\mcN}{\mathcal{N}}
+\newcommand{\mcO}{\mathcal{O}}
+\newcommand{\mcP}{\mathcal{P}}
+\newcommand{\mcQ}{\mathcal{Q}}
+\newcommand{\mcR}{\mathcal{R}}
+\newcommand{\mcS}{\mathcal{S}}
+\newcommand{\mcU}{\mathcal{U}}
+\newcommand{\mcZ}{\mathcal{Z}}
+\newcommand{\mfa}{\mathfrak{a}}
+\newcommand{\mfb}{\mathfrak{b}}
+\newcommand{\mfc}{\mathfrak{c}}
+\newcommand{\mfI}{\mathfrak{I}}
+\newcommand{\mfM}{\mathfrak{M}}
+\newcommand{\mfm}{\mathfrak{m}}
+\newcommand{\mfo}{\mathfrak{o}}
+\newcommand{\mfO}{\mathfrak{O}}
+\newcommand{\mfP}{\mathfrak{P}}
+\newcommand{\mfp}{\mathfrak{p}}
+\newcommand{\mfq}{\mathfrak{q}}
+\newcommand{\mfz}{\mathfrak{z}}
+\newcommand{\msC}{\mathscr{C}}
+\newcommand{\msP}{\mathscr{P}}
+\newcommand{\AGL}{\mathbb{A}\GL}
+\newcommand{\Qbar}{\overline{\QQ}}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+\newcommand{\bbone}{\mathbbm{1}}
+
+\DeclareRobustCommand{\sstirling}{\genfrac\{\}{0pt}{}}
+\DeclareRobustCommand{\fstirling}{\genfrac[]{0pt}{}}
+\def\multiset#1#2{\ensuremath{\left(\kern-.3em\left(\genfrac{}{}{0pt}{}{#1}{#2}\right)\kern-.3em\right)}}
+
+\newcommand{\planefig}[2] {
+	\filldraw[shift={#1},rotate=#2] (.4,.3) circle (2pt);
+	\filldraw[shift={#1},rotate=#2] (-.4,.3) circle (2pt);
+	\draw[shift={#1},rotate=#2] (-20:.55) arc (-20:-160:.55);
+	\draw[shift={#1},rotate=#2] (0,0) circle (1cm);
+}
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{heur}[thm]{Heuristic}
+\newtheorem{qn}[thm]{Question}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{cond}[thm]{Conditions}
+\newtheorem*{notn}{Notation}
+
+
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem*{ex}{Example}
+\newtheorem*{exer}{Exercise}
+\newtheorem*{sol}{Solution}
+\usepackage{tabularx} % Add this in the preamble
+
+
+\pgfplotsset{compat=1.17}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{geometry}
+\geometry{margin=0.7in}
+
+\definecolor{codegray}{gray}{0.95}
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\footnotesize,
+  frame=single,
+  breaklines=true,
+  showstringspaces=false
+}
+\title{Documentation for Product Code Encoder/Decoder}
+\author{}
+\date{}
+
+\begin{document}
+\vspace*{-3em}
+\maketitle
+
+\section{Overview}
+
+This script implements encoding and decoding for a Product Code using simulated transmission over an AWGN BPSK channel. Parity bits are computed using per-pair XORs along both rows and columns, and the decoder uses a min-sum based message-passing approach to iteratively decode the received bits.\\
+
+Let, $L(d)=log(\frac{P(d=+1}{P(d=-1)})$ is the apriori LLR for input bit $d$. The output LLR $$L(\hat{d})=L_c(x)+L(d)+L_e(\hat{d})$$ where $L_c(x)$ is the LLR of channel measurement at receiver, calculated using $MAP$- Maximum a posteriori rule, $L_e(\hat{d})$ is the extrinsic LLR value.\\
+\[
+L_c(x_k) = \log_e \left[ \frac{p(x_k \mid d_k = +1)}{p(x_k \mid d_k = -1)} \right]
+\]
+which simplifies to $$L_c(x_k)=\frac{2}{\sigma^2}x_k$$.
+For the product code, the iterative decoding algorithm proceeds as follows:
+
+\begin{enumerate}
+    \item Set the a priori LLR, $L(d)$
+    
+    \item Decode horizontally, and using $
+L(\hat{d}) = L_c(x) + L(d) + L_e(\hat{d})$
+ obtain the horizontal extrinsic LLR as shown below:
+    \[
+    L_{eh}(\hat{d}) = L(\hat{d}) - L_c(x) - L(d)
+    \]
+    
+    \item Set \( L(d) = L_{eh}(\hat{d}) \) for the vertical decoding of step 4.
+    
+    \item Similarly, decode vertically and obtain the vertical extrinsic LLR as shown below:
+    \[
+    L_{ev}(\hat{d}) = L(\hat{d}) - L_c(x) - L(d)
+    \]
+    
+    \item Set \( L(d) = L_{ev}(\hat{d}) \) and repeat steps 2 through 5.
+    
+    \item After enough iterations (that is, repetitions of steps 2 through 5) to yield a reliable decision, go to step 7.
+    
+    \item The soft output is
+    \[
+    L(\hat{d}) = L_c(x) + L_{eh}(\hat{d}) + L_{ev}(\hat{d})
+    \]\\
+\end{enumerate}
+
+\section{Dependencies}
+
+\begin{lstlisting}[language=Python]
+import numpy as np
+from itertools import combinations
+\end{lstlisting}
+
+\section{Function Descriptions}
+
+\subsection{simulate\_awgn\_bpsk\_channel}\mbox{}\\
+
+   \textbf{Purpose:} Simulates BPSK transmission over an AWGN channel and returns the Log-Likelihood Ratio (LLR) values. \\
+   \textbf{Inputs:} The bits/ bit matrix which is to be passed through the channel and signal to noise ratio in decibel.
+   \textbf{Returns:} \texttt{llr} Log likelihood ratio matrix of the input matrix after noise addition.
+
+
+
+\begin{lstlisting}[language=Python]
+def simulate_awgn_bpsk_channel(bits, snr_db):
+    snr_linear = 10**(snr_db / 10)
+    sigma = np.sqrt(1 / snr_linear)
+    bpsk = 2 * bits - 1
+    noise = np.random.normal(0, sigma, bits.shape)
+    received = bpsk + noise
+    llr = 2 * received / sigma**2
+    return llr
+\end{lstlisting}
+
+\subsection{encoder}\mbox{}\\
+
+\textbf{Purpose:} Encodes the $d \times d$ input data matrix, generates per-pair parity values along rows and columns, and simulates their transmission over AWGN.\\
+For calculating the parity dictionary, we XOR the respective data$\_$matrix values.
+\[
+d_i \oplus d_j = p_{ij}
+\]
+
+
+\begin{lstlisting}[language=Python]
+def encoder(data_matrix, snr_db):
+     data_matrix = np.array(data_matrix)
+    d= data_matrix.shape[0]
+    assert data_matrix.shape==(d,d)
+    Lc_matrix =simulate_awgn_bpsk_channel(data_matrix, snr_db)
+    parity_h={}
+    parity_v={}
+    for i in range(d):
+        for j1, j2 in combinations(range(d),2): parity_h[(i,j1,j2)]=simulate_awgn_bpsk_channel(np.array(data_matrix[i,j1]^data_matrix[i,j2]),snr_db)
+    for j in range(d):
+        for i1,i2 in combinations(range(d),2): parity_v[(j,i1,i2)]=simulate_awgn_bpsk_channel(np.array(data_matrix[i1,j]^data_matrix[i2,j]), snr_db)
+    return Lc_matrix, parity_h, parity_v
+\end{lstlisting}
+
+\textbf{Returns:}
+\begin{itemize}
+  \item \texttt{Lc\_matrix} -- LLR for each data bit.
+  \item \texttt{parity\_h} -- Dictionary of row-wise XOR parities with keys (\texttt{i,j1,j2)} for row \texttt{i} and pair\texttt{(j1,j2)}
+  \item \texttt{parity\_v} -- Dictionary of column-wise XOR parities with keys \texttt{(i1,i2,j)} with column \texttt{j} and pair \texttt{(i1,i2)}
+\end{itemize}
+
+\subsection{min\_sum\_xor}\mbox{}\\
+
+\textbf{Purpose:} Implements a min-sum approximation for XOR constraints in decoding.
+
+\begin{lstlisting}[language=Python]
+def min_sum_xor(l1, l2):
+    return -np.sign(l1) * np.sign(l2) * np.minimum(np.abs(l1), np.abs(l2))
+\end{lstlisting}
+
+\subsection{decoder}\mbox{}\\
+
+\textbf{Purpose:} Decodes the data matrix using iterative message passing. Each iteration consists of row-wise and column-wise extrinsic LLR updates using min-sum decoding.\\
+We use the information obtained of $d_i$ from the $d_j$s using the $XOR$ed parity bits. \[
+d_i = d_j \oplus p_{ij} \qquad i,j = 1,2
+\]
+\begin{lstlisting}[language=Python]
+def decoder(Lc_matrix, prior_matrix, parity_h, parity_v, max_iters):
+    ...
+\end{lstlisting}
+For example: If the data matrix were 2x2, the Extrinsic LLR of $d_1$ will be sum of these two: \[
+L_{eh}(\hat{d}_1) = \left[ L_c(x_2) + L(\hat{d}_2) \right] \boxplus L_c(x_{12})
+\]
+
+\[
+L_{ev}(\hat{d}_1) = \left[ L_c(x_3) + L(\hat{d}_3) \right] \boxplus L_c(x_{13})
+\]
+For Horizontal Extrinsic value updates,
+\begin{lstlisting}
+    L_horizontal = L.copy()
+        for (i, j1, j2), parity in parity_h.items():
+            ext_j1 = min_sum_xor(L[i, j2] + Lc_matrix[i, j2], parity)
+            ext_j2 = min_sum_xor(L[i, j1] + Lc_matrix[i, j1], parity)
+            L_horizontal[i, j1] += ext_j1
+            L_horizontal[i, j2] += ext_j2
+
+\end{lstlisting}
+\textbf{Returns:}
+\begin{itemize}
+  \item \texttt{L} -- Final LLR matrix after decoding.
+  \item \texttt{decoded\_bits} -- Final decision bits from LLRs.
+\end{itemize}
+
+\section{Example Execution}
+
+\begin{lstlisting}[language=Python]
+Lc_matrix, parity_h, parity_v = encoder([[1,0],[0,1]], 10*np.log10(0.5))
+print(Lc_matrix)
+L, decoded_bits = decoder(Lc_matrix, [[0,0],[0,0]], parity_h, parity_v, 2)
+print(L)
+print(decoded_bits)
+\end{lstlisting}
+\begin{lstlisting}
+[[-1.86797365 -2.34015361]
+ [-2.56058726  0.60310293]]
+[[ 6 -5]
+ [-4  8]]
+[[1 0]
+ [0 1]]
+\end{lstlisting}
+\section{Notes}
+
+\begin{itemize}
+  \item This implementation is designed for square matrices ($d \times d$).
+  \item XOR parity is taken over all possible pairs in each row and column.
+  \item LLRs are updated iteratively using a hard min-sum rule.
+  \item The decoder supports use of non-zero a priori input LLRs.
+\end{itemize}
+
+\end{document}
