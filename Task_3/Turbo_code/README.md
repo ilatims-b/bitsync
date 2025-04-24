@@ -11,7 +11,7 @@ The name "Turbo" comes from the iterative feedback decoding algorithm, analogous
 This directory contains the following presentations on Turbo Codes:
 
 1. **Intro and Log Likelihood Ratios** by Ananth
-   - File: `Intro_and_loglikelihood_ratios_presentation.pdf`
+   - File: `Intro_LLR.pdf`
    - Overview of Turbo codes and the Log Likelihood Ratio concept
 
 3. **Block Code and Extrinsic LLR** by Eppa
@@ -19,11 +19,11 @@ This directory contains the following presentations on Turbo Codes:
    - Covers Block Code concepts and Extrinsic Log Likelihood Ratios
 
 2. **Turbo Encoder** by Smitali
-   - File: `Turbo_Encoder_Presentation.pdf`
+   - File: `Turbo_Encoder.pdf`
    - Detailed explanation of Turbo encoding process
 
 4. **Turbo Decoder** by Taarun
-   - File: `Turbo_decoder_presentation.pdf`
+   - File: `Turbo_Decoder.pdf`
    - Comprehensive guide to Turbo decoding algorithms
 
 
