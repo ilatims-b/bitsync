@@ -1,0 +1,143 @@
+\documentclass{scrartcl}
+\usepackage{graphicx} % Required for inserting images
+
+\title{BitSync Task - Reed Solomon Codes}
+\author{Arjun Arunachalam}
+\date{\textsc{April 2025}}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Reed-Solomon codes were developed by Iriving S Reed and Gustave Solomon when working at MIT Labs in 1960. They use an alphabet set of length $q = p^m,$ q being a prime power (i.e. the encoding set is a galois field) and encode the input at $n$ points; later interpolating it to a polynomial. Using this, errors are detected or corrected and \textbf{binary erasures} can be taken care of.
+
+\section{Documentation}
+
+\subsection{\texttt{SimulateChannel.py}}
+
+\begin{itemize}
+    \item Requirements
+\begin{verbatim}
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+\end{verbatim}
+
+\item {Function to encode the text. Returns a list of encoded values. In this case, the encoding is just the number assigned to ASCII characters in Python.}
+\begin{verbatim}
+def encode_alphabet_naive(text):
+\end{verbatim}
+
+\item A custom encoding based on values modulo (3).
+\begin{verbatim}
+def encode_alphabet_custom(text):
+\end{verbatim}
+
+\item Function to decode. Here, decoding is based on the original function; i.e. Python assigned ASCII value to character.
+\begin{verbatim}
+def decode_alphabet(encoded_values):
+\end{verbatim}
+
+\item Returns a list of random values from the list $[1, n],$ with $n$ being the length of the pdist. The values are chosen based on corresponding probabilities in the pdist.
+\begin{verbatim}
+def random_out(pdist):
+    return np.random.choice(np.arange(1, len(pdist) + 1), p=pdist)
+\end{verbatim}
+Example: If pdist = [0.1, 0.1, 0.8], output could be [1, 3, 3] as 3 has higher probability.
+
+\item Plot the channel matrix as a heatmap.
+\begin{verbatim}
+def plot_channel_matrix(probab_matrx):
+\end{verbatim}
+
+\item Mean squared error function. Inputs actual, predicted are lists. Converted to numpy array to support index by index operations directly (actual - predicted = array of differences in values).
+\begin{verbatim}
+def mean_squared_error(actual, predicted):
+    actual = np.array(actual)
+    predicted = np.array(predicted)
+    return np.mean((actual - predicted) ** 2)
+\end{verbatim}
+
+\item Normalize rows and columns of the probability matrix.
+\begin{verbatim}
+probab_matrx = probab_matrx / probab_matrx.sum(axis=1, keepdims=True)
+probab_matrx = probab_matrx / probab_matrx.sum(axis=0, keepdims=True)
+\end{verbatim}
+
+\item Show results and error of custom encoding and ASCII encoding. To decide optimal encoding.
+\begin{verbatim}
+plot_channel_matrix(probab_matrx)
+\end{verbatim}
+\end{itemize}
+
+\newpage
+
+\subsection{\texttt{{Hamming\_Code\_Encoder\_Decoder.py}}}
+
+\begin{itemize}
+\item Requirements. Numpy
+\item Define Generator matrix G. (4, 7) and parity check matrix H (3, 7).
+\item Encoder. Comverts 4 bit to 7 bit. Accepts a 4 bit encoding as input. Conversion is done by taking dot product of encoding with a generator matrix.
+
+\begin{verbatim}
+def encode_batch(data_bits):
+\end{verbatim}
+
+\item Decoder. Takes in 7-bit input and converts it into the original 4-bit message. Procedure as follows.
+    \begin{itemize}
+        \item Get syndrome for error to bit mapping. Take dot product of parity check matrix and transpose of received code.
+        \item Obtain error bit based on positions obtain in syndrom tuple.
+        \item Copy the bit to a temporary variable, corrected.
+        \item If the bit is errored, flip corrected.
+        \item Append corrected to decoded array.
+\end{itemize}  
+\begin{verbatim}
+def decode_batch(received_batch):
+\end{verbatim}
+
+\item Simulate a channel with gaussian noise. Initialise standard deviation of noise distribution. Array of length = codewords.shape (length of code) picked from the distribution using np.random.normal(). Add noise to the codeword array and return the clipped array (round off values to integral/binary bits) using np.clip and np.round.
+\begin{verbatim}
+def gaussian_channel(codewords, noise_std=0.5):
+\end{verbatim}
+
+\item Simulate a channel with uniform noise; i.e. bit flipping with probability $p.$ Induce flips with probability $p$ by choosing random integers in the range [1, codewords.shape], with probability flip\_prob. Return the error induced array by adding and taking mod 2 for binary. Can be extended to n-nary.
+\begin{verbatim}
+def uniform_channel(codewords, flip_prob=0.1):
+\end{verbatim}
+
+\item Return the bit error rate = number of errored bits/total number of bits.
+\begin{verbatim}
+def bit_error_rate(original, decoded):
+\end{verbatim}
+
+\end{itemize}
+
+\newpage
+\subsection{\texttt{Reed\_Solomon\_Encoder\_Decoder.py}}
+\begin{itemize}
+\item Requirements. \texttt{numpy, galois.}
+\item Simulate binary erasure channel with erasure\_prob. An array of random indices is chosen with probability erasure\_prob using np.random.rand. Original codeword is copied to an array and chosen indices are replaced with '?' to indicate erasures. Returns the array.
+\begin{verbatim}
+def binary_erasure_channel(codeword, erasure_prob):
+\end{verbatim}
+
+\item Class for Reed Solomon Error Correction. Initialised variables and functions.
+\begin{itemize}
+    \item $m$ = Degree of field.
+    \item GF = Galois Field of order $m$ for the prime $p = 2$ in this case.
+    \item $n$ = Length of the codeword
+    \item $k$ = Total length of the message.
+
+    \item \texttt{def rs\_encode(self, message)} - First check for length of message. Fit the message into a polynomial in the GF by using \texttt{galois.Poly()} and store its range in a variable xs. The codeword will be the set of values at the points $\{ x_i \}$; stored in the variable codeword.
+
+    \item \texttt{def rs\_decode(self, received)} - Decode the message by computing the value of the interpolated polynomial at the points $\{ x_i \}.$ Use Lagrange Interpolation inbuilt in galois library. xs = $\{x_i\}$ is known and input is the receieved code. Add zeroes in the message to account for erasures and to maintain length of decoded message.
+
+    \item \texttt{def compute\_rate(self)} - Returns rate = $k/n.$ (Number of message bits/Total number of bits).
+\end{itemize}
+
+\item \texttt{main()} to call functions and display results.
+
+\end{itemize}
+
+\end{document}
