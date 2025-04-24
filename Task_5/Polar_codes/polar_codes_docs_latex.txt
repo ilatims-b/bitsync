@@ -1,0 +1,122 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+\usepackage{amsmath, amssymb, geometry, listings, color, hyperref}
+\geometry{margin=1in}
+\definecolor{codegray}{gray}{0.9}
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,
+  frame=single,
+  language=Python,
+  showstringspaces=false,
+  tabsize=4
+}
+
+\title{Polar Codes Python Implementation Documentation}
+\author{Developer: EE24B069}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This document provides a detailed explanation of the Python implementation of Polar Codes as provided in the file. Polar codes are a class of capacity-achieving error-correcting codes. This document explains each function used in the implementation.
+
+\section{Function Documentation}
+
+\subsection{\texttt{gaussian\_channel\_simulator}}
+\textbf{Purpose:} Simulates the transmission of a signal over an additive white Gaussian noise (AWGN) channel.
+\begin{lstlisting}
+def gaussian_channel_simulator(encoded_message_arr, std_dev_of_error):
+    modulated_arr = (2 * encoded_message_arr) - 1
+    return np.random.normal(0, std_dev_of_error, modulated_arr.shape) + modulated_arr
+\end{lstlisting}
+This modulates bits opposite to normal BPSK format, i.e, 0 is mapped to -1 and 1 to mapped to 1, then adds Gaussian noise of given standard deviation.
+
+\subsection{\texttt{worst\_to\_best\_channel\_indices\_arr\_reducer}}
+\textbf{Purpose:} Reduces the worst to best channel indices array to the required number of channels.
+\begin{lstlisting}
+def worst_to_best_channel_indices_arr_reducer(no_of_channels, worst_to_best_channel_indices_arr):
+    ...
+\end{lstlisting}
+Ensures the returned array has indices only within the range [0, no\_of\_channels-1].
+
+\subsection{\texttt{channel\_inputs\_organiser}}
+\textbf{Purpose:} Arranges the input bits and frozen bits before encoding.
+\begin{lstlisting}
+def channel_inputs_organiser(depth_of_tree, worst_to_best_channel_indices_arr, message_list):
+    ...
+\end{lstlisting}
+Pads the message with zeros (frozen bits) and reorders them so that the frozen bits go to the least reliable channels.
+
+\subsection{\texttt{polar\_operation}}
+\textbf{Purpose:} Combines two lists using bitwise XOR followed by second list as it is.
+\begin{lstlisting}
+def polar_operation(list1, list2):
+    ...
+\end{lstlisting}
+Returns the XOR result followed by the second list.
+
+\subsection{\texttt{polar\_encoder}}
+\textbf{Purpose:} Encodes a message using the Polar encoding scheme.
+\begin{lstlisting}
+def polar_encoder(depth_of_tree, ...):
+    ...
+\end{lstlisting}
+Constructs the encoded message by recursively applying polar operation.
+
+\subsection{\texttt{Node} Class}
+\textbf{Purpose:} Defines a node in the successive cancellation decoding tree.
+Each node processes log-likelihood ratios (LLRs), and forwards decisions.
+LLRs have not been exactly used, the received values have been directly used.
+Includes:
+\begin{itemize}
+    \item \texttt{minsum\_calculater}: Min-sum approximation for the log sum exp, this is the llr's for the left child.
+    \item \texttt{llr\_for\_right\_child\_calculator}: Computes LLRs for right child, using the hard output from the left node
+    \item \texttt{create\_and\_send\_info\_to\_left/right\_child}: Creates a new node and computes their respective LLRs.
+    \item \texttt{send\_info\_above}: Propagates bits upward for further decoding.
+\end{itemize}
+
+\subsection{\texttt{frozen\_bits\_remover}}
+\textbf{Purpose:} Removes padded zeros(frozen bits) from the decoded message.
+\begin{lstlisting}
+def frozen_bits_remover(decoded_message_list, ...):
+    ...
+\end{lstlisting}
+Returns the actual decoded message by excluding frozen bits.
+
+\subsection{\texttt{polar\_decoder}}
+\textbf{Purpose:} Decodes a single chunk of received bits.
+\begin{lstlisting}
+def polar_decoder(received_list, ...):
+    ...
+\end{lstlisting}
+Implements Successive Cancellation decoding using the Node class.
+
+\subsection{\texttt{complete\_polar\_encoder} and \texttt{complete\_polar\_decoder}}
+\textbf{Purpose:} Handle full-length messages by dividing them into chunks. The polar encoder and decoder used before could only handle small message lengths, length of message must be less than number of channels there. Here, it breaks the big message into chunks and overcomes that issue.
+\begin{lstlisting}
+def complete_polar_encoder(...):
+    ...
+
+def complete_polar_decoder(...):
+    ...
+\end{lstlisting}
+Breaks a long message into multiple parts and processes each chunk separately.
+
+\subsection{\texttt{no\_of\_bit\_errors\_finder}}
+\textbf{Purpose:} Calculates bit error count.
+\begin{lstlisting}
+def no_of_bit_errors_finder(message_list, decoded_message_list):
+    ...
+\end{lstlisting}
+Compares the decoded message with the original and returns the number of bit errors. 
+
+\section{Conclusion}
+This documentation outlines the purpose and working of each component in the polar codes implementation. Together, these functions and classes perform efficient polar encoding and decoding over noisy channels.
+
+\end{document}
+
+
